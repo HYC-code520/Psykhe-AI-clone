@@ -7,7 +7,7 @@ export default function Header() {
         <img 
           src={logoPath}
           alt="Psykhe AI Logo" 
-          className="h-14 object-contain"
+          className="object-contain"
         />
       </div>
     </header>
