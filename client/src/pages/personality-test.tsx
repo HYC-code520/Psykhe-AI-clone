@@ -189,12 +189,14 @@ export default function PersonalityTest() {
 
                 {/* Answer options - vertical stack */}
                 <div className="flex flex-col space-y-4 w-full">
-                  {currentQuestion.options.map((option) => (
+                  {currentQuestion.options.map((option, index) => (
                     <QuestionCard
                       key={option.id}
                       option={option}
                       isSelected={selectedAnswers[currentQuestion.id]?.includes(option.id) || false}
                       onToggle={() => handleOptionToggle(currentQuestion.id, option.id)}
+                      index={index}
+                      totalOptions={currentQuestion.options.length}
                     />
                   ))}
                 </div>
