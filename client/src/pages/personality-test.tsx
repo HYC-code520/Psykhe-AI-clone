@@ -173,7 +173,7 @@ export default function PersonalityTest() {
                 </Button>
 
                 {/* Answer options - vertical stack */}
-                <div className="flex flex-col space-y-4 max-w-md">
+                <div className="flex flex-col space-y-4 w-full max-w-xl">
                   {currentQuestion.options.map((option) => (
                     <QuestionCard
                       key={option.id}
