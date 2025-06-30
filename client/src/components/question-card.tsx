@@ -57,7 +57,7 @@ export default function QuestionCard({ option, isSelected, onToggle, index, tota
       style={{ background: getButtonGradient() }}
       onClick={onToggle}
     >
-      <span className="font-medium text-base leading-relaxed">
+      <span className="font-serif font-medium text-base leading-relaxed">
         {option.text}
       </span>
     </div>
