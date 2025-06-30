@@ -159,21 +159,21 @@ export default function PersonalityTest() {
             </div>
 
             {/* Right side - Answer Options */}
-            <div className="flex items-center justify-center">
-              <div className="flex items-center space-x-4">
+            <div className="flex items-center justify-center w-full">
+              <div className="flex items-center space-x-4 w-full max-w-none">
                 {/* Left navigation arrow for desktop */}
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={() => handleNavigation('prev')}
                   disabled={currentQuestionIndex === 0}
-                  className="hidden lg:flex p-3 hover:bg-gray-100 rounded-full"
+                  className="hidden lg:flex p-3 hover:bg-gray-100 rounded-full flex-shrink-0"
                 >
                   <ChevronLeft className="w-6 h-6 text-gray-600" />
                 </Button>
 
                 {/* Answer options - vertical stack */}
-                <div className="flex flex-col space-y-4 w-full max-w-4xl">
+                <div className="flex flex-col space-y-4 w-full">
                   {currentQuestion.options.map((option) => (
                     <QuestionCard
                       key={option.id}
@@ -189,7 +189,7 @@ export default function PersonalityTest() {
                   variant="ghost"
                   size="icon"
                   onClick={() => isLastQuestion ? handleComplete() : handleNavigation('next')}
-                  className="hidden lg:flex p-3 hover:bg-gray-100 rounded-full"
+                  className="hidden lg:flex p-3 hover:bg-gray-100 rounded-full flex-shrink-0"
                 >
                   <ChevronRight className="w-6 h-6 text-gray-600" />
                 </Button>
