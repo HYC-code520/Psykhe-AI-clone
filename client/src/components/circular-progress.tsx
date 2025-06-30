@@ -4,7 +4,7 @@ interface CircularProgressProps {
 }
 
 export default function CircularProgress({ progress, children }: CircularProgressProps) {
-  const radius = 200;
+  const radius = 280;
   const strokeWidth = 4;
   const normalizedRadius = radius - strokeWidth * 2;
   const circumference = normalizedRadius * 2 * Math.PI;
@@ -51,33 +51,11 @@ export default function CircularProgress({ progress, children }: CircularProgres
             <stop offset="100%" stopColor="var(--psykhe-green)" />
           </linearGradient>
         </defs>
-        {/* Progress dots */}
-        {Array.from({ length: 8 }).map((_, index) => {
-          const angle = (index * 360) / 8;
-          const dotRadius = normalizedRadius;
-          const dotX = radius + dotRadius * Math.cos((angle * Math.PI) / 180);
-          const dotY = radius + dotRadius * Math.sin((angle * Math.PI) / 180);
-          const currentProgress = (progress / 100) * 8;
-          const isActive = index < currentProgress;
-          
-          return (
-            <circle
-              key={index}
-              cx={dotX}
-              cy={dotY}
-              r="3"
-              fill={isActive ? "white" : "transparent"}
-              stroke={isActive ? "currentColor" : "currentColor"}
-              strokeWidth="1"
-              className={isActive ? "text-gray-600" : "text-gray-300"}
-            />
-          );
-        })}
       </svg>
       
       {/* Content in the center */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="max-w-xs text-center px-8">
+        <div className="max-w-md text-center px-12">
           {children}
         </div>
       </div>
