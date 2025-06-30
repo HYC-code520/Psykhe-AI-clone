@@ -18,7 +18,7 @@ export default function QuestionCard({ option, isSelected, onToggle }: QuestionC
   return (
     <div
       className={cn(
-        "card-hover cursor-pointer px-8 py-4 rounded-xl text-white text-center w-full flex items-center justify-center",
+        "card-hover cursor-pointer px-16 py-4 rounded-xl text-white text-center w-full flex items-center justify-center min-w-full",
         isSelected && "card-selected"
       )}
       style={{ backgroundColor: option.color }}
