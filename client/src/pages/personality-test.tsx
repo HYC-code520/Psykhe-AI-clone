@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import Header from "@/components/header";
-import ProgressBar from "@/components/progress-bar";
+import CircularProgress from "@/components/circular-progress";
 import QuestionCard from "@/components/question-card";
 import Footer from "@/components/footer";
 import { questions } from "@/lib/test-data";
@@ -124,16 +124,17 @@ export default function PersonalityTest() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Header />
-      <ProgressBar progress={progressPercentage} />
       
       <div className="flex-1 flex items-center px-6 py-12 min-h-questionnaire">
         <div className="w-full max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Left side - Question */}
-            <div className="flex flex-col justify-center">
-              <h2 className="font-serif text-3xl md:text-4xl text-black leading-relaxed">
-                {currentQuestion.text}
-              </h2>
+            {/* Left side - Question with Circular Progress */}
+            <div className="flex flex-col justify-center items-center">
+              <CircularProgress progress={progressPercentage}>
+                <h2 className="font-serif text-2xl md:text-3xl text-black leading-relaxed text-center">
+                  {currentQuestion.text}
+                </h2>
+              </CircularProgress>
               
               {/* Navigation arrows for mobile */}
               <div className="flex items-center space-x-4 mt-8 lg:hidden">
