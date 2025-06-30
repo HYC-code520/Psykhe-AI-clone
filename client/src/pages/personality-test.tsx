@@ -172,8 +172,8 @@ export default function PersonalityTest() {
                   <ChevronLeft className="w-6 h-6 text-gray-600" />
                 </Button>
 
-                {/* Answer options grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 max-w-lg">
+                {/* Answer options - vertical stack */}
+                <div className="flex flex-col space-y-4 max-w-md">
                   {currentQuestion.options.map((option) => (
                     <QuestionCard
                       key={option.id}
