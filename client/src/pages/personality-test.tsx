@@ -126,46 +126,80 @@ export default function PersonalityTest() {
       <Header />
       <ProgressBar progress={progressPercentage} />
       
-      <div className="flex-1 flex flex-col justify-center items-center px-6 py-12 min-h-questionnaire">
-        <div className="w-full max-w-4xl mx-auto text-center">
-          <h2 className="font-serif text-3xl md:text-4xl text-black mb-12 leading-relaxed">
-            {currentQuestion.text}
-          </h2>
+      <div className="flex-1 flex items-center px-6 py-12 min-h-questionnaire">
+        <div className="w-full max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left side - Question */}
+            <div className="flex flex-col justify-center">
+              <h2 className="font-serif text-3xl md:text-4xl text-black leading-relaxed">
+                {currentQuestion.text}
+              </h2>
+              
+              {/* Navigation arrows for mobile */}
+              <div className="flex items-center space-x-4 mt-8 lg:hidden">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleNavigation('prev')}
+                  disabled={currentQuestionIndex === 0}
+                  className="p-3 hover:bg-gray-100 rounded-full"
+                >
+                  <ChevronLeft className="w-6 h-6 text-gray-600" />
+                </Button>
 
-          <div className="flex items-center justify-center space-x-8">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => handleNavigation('prev')}
-              disabled={currentQuestionIndex === 0}
-              className="p-3 hover:bg-gray-100 rounded-full"
-            >
-              <ChevronLeft className="w-6 h-6 text-gray-600" />
-            </Button>
-
-            <div className="grid grid-cols-1 sm:grid-cols-5 gap-4 max-w-3xl">
-              {currentQuestion.options.map((option) => (
-                <QuestionCard
-                  key={option.id}
-                  option={option}
-                  isSelected={selectedAnswers[currentQuestion.id]?.includes(option.id) || false}
-                  onToggle={() => handleOptionToggle(currentQuestion.id, option.id)}
-                />
-              ))}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => isLastQuestion ? handleComplete() : handleNavigation('next')}
+                  className="p-3 hover:bg-gray-100 rounded-full"
+                >
+                  <ChevronRight className="w-6 h-6 text-gray-600" />
+                </Button>
+              </div>
             </div>
 
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => isLastQuestion ? handleComplete() : handleNavigation('next')}
-              className="p-3 hover:bg-gray-100 rounded-full"
-            >
-              <ChevronRight className="w-6 h-6 text-gray-600" />
-            </Button>
+            {/* Right side - Answer Options */}
+            <div className="flex items-center justify-center">
+              <div className="flex items-center space-x-4">
+                {/* Left navigation arrow for desktop */}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleNavigation('prev')}
+                  disabled={currentQuestionIndex === 0}
+                  className="hidden lg:flex p-3 hover:bg-gray-100 rounded-full"
+                >
+                  <ChevronLeft className="w-6 h-6 text-gray-600" />
+                </Button>
+
+                {/* Answer options grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 max-w-lg">
+                  {currentQuestion.options.map((option) => (
+                    <QuestionCard
+                      key={option.id}
+                      option={option}
+                      isSelected={selectedAnswers[currentQuestion.id]?.includes(option.id) || false}
+                      onToggle={() => handleOptionToggle(currentQuestion.id, option.id)}
+                    />
+                  ))}
+                </div>
+
+                {/* Right navigation arrow for desktop */}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => isLastQuestion ? handleComplete() : handleNavigation('next')}
+                  className="hidden lg:flex p-3 hover:bg-gray-100 rounded-full"
+                >
+                  <ChevronRight className="w-6 h-6 text-gray-600" />
+                </Button>
+              </div>
+            </div>
           </div>
 
+          {/* Complete test button */}
           {isLastQuestion && (
-            <div className="mt-8">
+            <div className="text-center mt-12">
               <Button
                 onClick={handleComplete}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg"
