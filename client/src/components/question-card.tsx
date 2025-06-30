@@ -51,7 +51,7 @@ export default function QuestionCard({ option, isSelected, onToggle, index, tota
   return (
     <div
       className={cn(
-        "card-hover cursor-pointer px-8 py-5 rounded-3xl text-white text-center w-full flex items-center justify-center min-w-full transition-all duration-200 shadow-lg hover:shadow-xl",
+        "card-hover cursor-pointer px-8 py-5 rounded-3xl text-black text-center w-full flex items-center justify-center min-w-full transition-all duration-200 shadow-lg hover:shadow-xl",
         isSelected && "ring-2 ring-white ring-offset-2 scale-105"
       )}
       style={{ background: getButtonGradient() }}
