@@ -32,19 +32,19 @@ export default function QuestionCard({ option, isSelected, onToggle, index, tota
       greenLight: 'hsl(84, 60%, 80%)'
     };
     
-    // Create gradients that transition through the theme spectrum
+    // Create horizontal gradients that transition through the theme spectrum
     if (ratio <= 0.25) {
       // First quarter: Green variations
-      return `linear-gradient(135deg, ${themeColors.greenLight} 0%, ${themeColors.green} 100%)`;
+      return `linear-gradient(90deg, ${themeColors.greenLight} 0%, ${themeColors.green} 100%)`;
     } else if (ratio <= 0.5) {
       // Second quarter: Green to Blue
-      return `linear-gradient(135deg, ${themeColors.green} 0%, ${themeColors.blueLight} 100%)`;
+      return `linear-gradient(90deg, ${themeColors.green} 0%, ${themeColors.blueLight} 100%)`;
     } else if (ratio <= 0.75) {
       // Third quarter: Blue variations
-      return `linear-gradient(135deg, ${themeColors.blueLight} 0%, ${themeColors.gradientBlue} 100%)`;
+      return `linear-gradient(90deg, ${themeColors.blueLight} 0%, ${themeColors.gradientBlue} 100%)`;
     } else {
       // Last quarter: Blue to Purple
-      return `linear-gradient(135deg, ${themeColors.gradientBlue} 0%, ${themeColors.purple} 100%)`;
+      return `linear-gradient(90deg, ${themeColors.gradientBlue} 0%, ${themeColors.purple} 100%)`;
     }
   };
 
