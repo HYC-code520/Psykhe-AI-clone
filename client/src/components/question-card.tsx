@@ -21,15 +21,18 @@ export default function QuestionCard({ option, isSelected, onToggle, index, tota
   const getButtonGradient = () => {
     const ratio = totalOptions > 1 ? index / (totalOptions - 1) : 0; // 0 for first, 1 for last
     
-    // Use the same color scheme as the footer gradient with pastel transparency
+    // Use different opacity based on selection state
+    const opacity = isSelected ? 1.0 : 0.45;
+    
+    // Use the same color scheme as the footer gradient
     // Purple -> Blue -> Green progression matching the theme
     const themeColors = {
-      purple: 'hsla(295, 71%, 56%, 0.45)',
-      gradientBlue: 'hsla(207, 73%, 57%, 0.45)', 
-      green: 'hsla(84, 60%, 67%, 0.45)',
-      purpleLight: 'hsla(295, 71%, 70%, 0.45)',
-      blueLight: 'hsla(207, 73%, 70%, 0.45)',
-      greenLight: 'hsla(84, 60%, 80%, 0.45)'
+      purple: `hsla(295, 71%, 56%, ${opacity})`,
+      gradientBlue: `hsla(207, 73%, 57%, ${opacity})`, 
+      green: `hsla(84, 60%, 67%, ${opacity})`,
+      purpleLight: `hsla(295, 71%, 70%, ${opacity})`,
+      blueLight: `hsla(207, 73%, 70%, ${opacity})`,
+      greenLight: `hsla(84, 60%, 80%, ${opacity})`
     };
     
     // Create vertical gradients that transition through the theme spectrum
