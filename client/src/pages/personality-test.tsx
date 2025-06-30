@@ -130,6 +130,9 @@ export default function PersonalityTest() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left side - Question with Circular Progress */}
             <div className="flex flex-col justify-center items-center">
+              <p className="text-gray-400 text-sm font-medium mb-6">
+                Question {currentQuestionIndex + 1} of {questions.length}
+              </p>
               <CircularProgress progress={progressPercentage}>
                 <h2 className="font-serif text-2xl md:text-3xl text-black leading-relaxed text-center">
                   {currentQuestion.text}
