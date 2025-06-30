@@ -17,32 +17,35 @@ interface QuestionCardProps {
 }
 
 export default function QuestionCard({ option, isSelected, onToggle, index, totalOptions }: QuestionCardProps) {
-  // Calculate gradient colors based on position - green to purple progression
+  // Calculate gradient colors based on position using theme colors
   const getButtonGradient = () => {
     const ratio = totalOptions > 1 ? index / (totalOptions - 1) : 0; // 0 for first, 1 for last
     
-    // Define specific colors for the gradient spectrum to match the reference
-    const gradients = [
-      'linear-gradient(135deg, #a8e6cf 0%, #7fcdcd 100%)', // Light green to teal
-      'linear-gradient(135deg, #7fcdcd 0%, #4fc3f7 100%)', // Teal to light blue
-      'linear-gradient(135deg, #4fc3f7 0%, #3f51b5 100%)', // Light blue to blue
-      'linear-gradient(135deg, #3f51b5 0%, #7b1fa2 100%)', // Blue to purple
-      'linear-gradient(135deg, #7b1fa2 0%, #c2185b 100%)', // Purple to magenta
-    ];
+    // Use the same color scheme as the footer gradient for consistency
+    // Purple -> Blue -> Green progression matching the theme
+    const themeColors = {
+      purple: 'hsl(295, 71%, 56%)',
+      gradientBlue: 'hsl(207, 73%, 57%)', 
+      green: 'hsl(84, 60%, 67%)',
+      purpleLight: 'hsl(295, 71%, 70%)',
+      blueLight: 'hsl(207, 73%, 70%)',
+      greenLight: 'hsl(84, 60%, 80%)'
+    };
     
-    // If we have specific gradients, use them; otherwise calculate dynamically
-    if (totalOptions <= gradients.length) {
-      const gradientIndex = Math.round(ratio * (gradients.length - 1));
-      return gradients[gradientIndex];
+    // Create gradients that transition through the theme spectrum
+    if (ratio <= 0.25) {
+      // First quarter: Green variations
+      return `linear-gradient(135deg, ${themeColors.greenLight} 0%, ${themeColors.green} 100%)`;
+    } else if (ratio <= 0.5) {
+      // Second quarter: Green to Blue
+      return `linear-gradient(135deg, ${themeColors.green} 0%, ${themeColors.blueLight} 100%)`;
+    } else if (ratio <= 0.75) {
+      // Third quarter: Blue variations
+      return `linear-gradient(135deg, ${themeColors.blueLight} 0%, ${themeColors.gradientBlue} 100%)`;
+    } else {
+      // Last quarter: Blue to Purple
+      return `linear-gradient(135deg, ${themeColors.gradientBlue} 0%, ${themeColors.purple} 100%)`;
     }
-    
-    // Fallback to calculated gradient for more than 5 options
-    const baseHue = 120 + (ratio * 180);
-    const saturation = 75;
-    const lightColor = `hsl(${baseHue}, ${saturation}%, 70%)`;
-    const darkColor = `hsl(${baseHue}, ${saturation}%, 50%)`;
-    
-    return `linear-gradient(135deg, ${lightColor} 0%, ${darkColor} 100%)`;
   };
 
   return (
