@@ -125,7 +125,7 @@ export default function PersonalityTest() {
     <div className="min-h-screen flex flex-col bg-white">
       <Header />
       
-      <div className="flex-1 flex items-center px-6 py-12 min-h-questionnaire">
+      <div className="flex-1 flex items-center px-6 py-6 min-h-questionnaire">
         <div className="w-full max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left side - Question with Circular Progress */}
