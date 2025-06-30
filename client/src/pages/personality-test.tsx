@@ -133,11 +133,22 @@ export default function PersonalityTest() {
               <p className="text-gray-400 text-sm font-medium mb-6">
                 Question {currentQuestionIndex + 1} of {questions.length}
               </p>
-              <CircularProgress progress={progressPercentage}>
-                <h2 className="font-serif text-2xl md:text-3xl text-black leading-relaxed text-center">
+              
+              {/* Desktop version with circular progress */}
+              <div className="hidden lg:block">
+                <CircularProgress progress={progressPercentage}>
+                  <h2 className="font-serif text-2xl md:text-3xl text-black leading-relaxed text-center">
+                    {currentQuestion.text}
+                  </h2>
+                </CircularProgress>
+              </div>
+              
+              {/* Mobile version without circular progress */}
+              <div className="lg:hidden">
+                <h2 className="font-serif text-2xl text-black leading-relaxed text-center max-w-md">
                   {currentQuestion.text}
                 </h2>
-              </CircularProgress>
+              </div>
               
               {/* Navigation arrows for mobile */}
               <div className="flex items-center space-x-4 mt-8 lg:hidden">
