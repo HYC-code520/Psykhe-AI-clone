@@ -10,7 +10,8 @@ import { calculateResults } from "@/lib/scoring";
 import { apiRequest } from "@/lib/queryClient";
 import type { TestSession } from "@shared/schema";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowLeft, ArrowRight, SkipBack, SkipForward } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function PersonalityTest() {
   const [, setLocation] = useLocation();
@@ -18,6 +19,7 @@ export default function PersonalityTest() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string[]>>({});
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   // Create session on component mount
   const createSessionMutation = useMutation({
@@ -61,21 +63,43 @@ export default function PersonalityTest() {
     }
   }, [sessionData]);
 
+  // useEffect(() => {
+  //   if (currentQuestionIndex === 9) {
+  //     toast({
+  //       title: "Nice! You're a third of the way through 💪",
+  //     });
+  //   } else if (currentQuestionIndex === 19) {
+  //     toast({
+  //       title: "Just 10 more to go! You're doing great 🎯",
+  //     });
+  //   }
+  // }, [currentQuestionIndex, toast]);
+
   const currentQuestion = questions[currentQuestionIndex];
   const isLastQuestion = currentQuestionIndex === questions.length - 1;
   const progressPercentage = ((currentQuestionIndex + 1) / questions.length) * 100;
+  
+  // Check if current question is multi-select
+  const isMultiSelect = currentQuestion?.text.includes("(Select all that apply.)");
 
   const handleOptionToggle = (questionId: string, optionId: string) => {
     const newAnswers = { ...selectedAnswers };
-    if (!newAnswers[questionId]) {
-      newAnswers[questionId] = [];
-    }
+    
+    if (isMultiSelect) {
+      // Multi-select logic (existing behavior)
+      if (!newAnswers[questionId]) {
+        newAnswers[questionId] = [];
+      }
 
-    const currentOptions = newAnswers[questionId];
-    if (currentOptions.includes(optionId)) {
-      newAnswers[questionId] = currentOptions.filter(id => id !== optionId);
+      const currentOptions = newAnswers[questionId];
+      if (currentOptions.includes(optionId)) {
+        newAnswers[questionId] = currentOptions.filter(id => id !== optionId);
+      } else {
+        newAnswers[questionId] = [...currentOptions, optionId];
+      }
     } else {
-      newAnswers[questionId] = [...currentOptions, optionId];
+      // Single-select logic - replace with new selection
+      newAnswers[questionId] = [optionId];
     }
 
     setSelectedAnswers(newAnswers);
@@ -85,6 +109,14 @@ export default function PersonalityTest() {
       answers: newAnswers,
       currentQuestionIndex,
     });
+
+    // Auto-advance for single-select questions (unless it's the last question)
+    if (!isMultiSelect && !isLastQuestion) {
+      // Add a small delay to show the selection briefly
+      setTimeout(() => {
+        handleNavigation('next');
+      }, 300);
+    }
   };
 
   const handleNavigation = (direction: 'prev' | 'next') => {
@@ -114,7 +146,8 @@ export default function PersonalityTest() {
       results,
     });
 
-    setLocation(`/results/${sessionId}`);
+    // Navigate to the placeholder page instead of results
+    setLocation(`/fill-info-placeholder?sessionId=${sessionId}`);
   };
 
   if (!currentQuestion) {
@@ -137,7 +170,7 @@ export default function PersonalityTest() {
               {/* Desktop version with circular progress */}
               <div className="hidden lg:block">
                 <CircularProgress progress={progressPercentage}>
-                  <h2 className="font-serif text-2xl md:text-3xl text-black leading-relaxed text-center">
+                  <h2 className="font-serif text-3xl md:text-4xl text-black leading-relaxed text-center">
                     {currentQuestion.text}
                   </h2>
                 </CircularProgress>
@@ -145,47 +178,28 @@ export default function PersonalityTest() {
               
               {/* Mobile version without circular progress */}
               <div className="lg:hidden">
-                <h2 className="font-serif text-2xl text-black leading-relaxed text-center max-w-md">
+                <h2 className="font-serif text-2xl md:text-3xl text-black leading-relaxed text-center max-w-md">
                   {currentQuestion.text}
                 </h2>
               </div>
-              
-              {/* Navigation arrows for mobile */}
-              <div className="flex items-center space-x-4 mt-8 lg:hidden">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => handleNavigation('prev')}
-                  disabled={currentQuestionIndex === 0}
-                  className="p-3 hover:bg-gray-100 rounded-full"
-                >
-                  <ChevronLeft className="w-6 h-6 text-gray-600" />
-                </Button>
-
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => isLastQuestion ? handleComplete() : handleNavigation('next')}
-                  className="p-3 hover:bg-gray-100 rounded-full"
-                >
-                  <ChevronRight className="w-6 h-6 text-gray-600" />
-                </Button>
-              </div>
             </div>
 
-            {/* Right side - Answer Options */}
+            {/* Right side - Answer Options with Navigation */}
             <div className="flex items-center justify-center w-full">
-              <div className="flex items-center space-x-4 w-full max-w-none">
-                {/* Left navigation arrow for desktop */}
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => handleNavigation('prev')}
-                  disabled={currentQuestionIndex === 0}
-                  className="hidden lg:flex p-3 hover:bg-gray-100 rounded-full flex-shrink-0"
-                >
-                  <ChevronLeft className="w-6 h-6 text-gray-600" />
-                </Button>
+              <div className="flex items-center space-x-2 lg:space-x-6 w-full max-w-none">
+                {/* Left navigation arrow - visible on all screen sizes */}
+                {currentQuestionIndex > 0 ? (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => handleNavigation('prev')}
+                    className="flex p-3 lg:p-4 hover:bg-gray-100 rounded-full flex-shrink-0 w-12 h-12 lg:w-16 lg:h-16"
+                  >
+                    <ArrowLeft className="w-6 h-6 lg:w-10 lg:h-10 text-gray-600" />
+                  </Button>
+                ) : (
+                  <div className="w-12 h-12 lg:w-16 lg:h-16 flex-shrink-0" />
+                )}
 
                 {/* Answer options - vertical stack */}
                 <div className="flex flex-col space-y-4 w-full">
@@ -197,35 +211,23 @@ export default function PersonalityTest() {
                       onToggle={() => handleOptionToggle(currentQuestion.id, option.id)}
                       index={index}
                       totalOptions={currentQuestion.options.length}
+                      isMultiSelect={isMultiSelect}
                     />
                   ))}
                 </div>
 
-                {/* Right navigation arrow for desktop */}
+                {/* Right navigation arrow - visible on all screen sizes */}
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={() => isLastQuestion ? handleComplete() : handleNavigation('next')}
-                  className="hidden lg:flex p-3 hover:bg-gray-100 rounded-full flex-shrink-0"
+                  className="flex p-3 lg:p-4 hover:bg-gray-100 rounded-full flex-shrink-0 w-12 h-12 lg:w-16 lg:h-16"
                 >
-                  <ChevronRight className="w-6 h-6 text-gray-600" />
+                  <ArrowRight className="w-6 h-6 lg:w-10 lg:h-10 text-gray-600" />
                 </Button>
               </div>
             </div>
           </div>
-
-          {/* Complete test button */}
-          {isLastQuestion && (
-            <div className="text-center mt-12">
-              <Button
-                onClick={handleComplete}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg"
-                disabled={updateSessionMutation.isPending}
-              >
-                {updateSessionMutation.isPending ? "Completing..." : "Complete Test"}
-              </Button>
-            </div>
-          )}
         </div>
       </div>
 

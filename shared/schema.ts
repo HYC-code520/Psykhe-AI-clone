@@ -43,6 +43,7 @@ export interface Question {
     color: string;
     trait: keyof PersonalityTraits;
     score: number;
+    image?: string;
   }[];
 }
 

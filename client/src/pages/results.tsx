@@ -1,142 +1,81 @@
-import { useQuery } from "@tanstack/react-query";
-import { useParams, useLocation } from "wouter";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import type { TestSession } from "@shared/schema";
-
-const traitDescriptions = {
-  openness: {
-    name: "Openness to Experience",
-    description: "Reflects your willingness to try new things and think outside the box.",
-  },
-  conscientiousness: {
-    name: "Conscientiousness", 
-    description: "Measures how organized, disciplined, and goal-oriented you are.",
-  },
-  extraversion: {
-    name: "Extraversion",
-    description: "Indicates how outgoing, energetic, and socially confident you are.",
-  },
-  agreeableness: {
-    name: "Agreeableness",
-    description: "Reflects how cooperative, trusting, and empathetic you are.",
-  },
-  neuroticism: {
-    name: "Neuroticism",
-    description: "Measures emotional stability and your tendency to experience negative emotions.",
-  },
-};
+import { useLocation } from "wouter";
+import { Download, Share2, RefreshCw } from "lucide-react";
 
 export default function Results() {
-  const params = useParams();
   const [, setLocation] = useLocation();
-  const sessionId = params.sessionId;
 
-  const { data: session, isLoading } = useQuery<TestSession>({
-    queryKey: ["/api/test-sessions", sessionId],
-    enabled: !!sessionId,
-  });
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex flex-col bg-white">
-        <Header />
-        <div className="flex-1 flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-lg text-gray-600">Loading your results...</p>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
-
-  if (!session || !session.results) {
-    return (
-      <div className="min-h-screen flex flex-col bg-white">
-        <Header />
-        <div className="flex-1 flex items-center justify-center">
-          <Card className="w-full max-w-md mx-4">
-            <CardContent className="pt-6 text-center">
-              <h1 className="text-2xl font-bold text-gray-900 mb-4">Results Not Found</h1>
-              <p className="text-gray-600 mb-6">
-                We couldn't find your test results. Please try taking the test again.
-              </p>
-              <Button onClick={() => setLocation("/")}>
-                Start New Test
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
-
-  const results = session.results;
+  // Placeholder handlers
+  const handleDownload = () => {
+    alert("Download functionality coming soon!");
+  };
+  const handleShare = () => {
+    alert("Share functionality coming soon!");
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Header />
-      
-      <div className="flex-1 px-6 py-12">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h1 className="font-serif text-4xl md:text-5xl text-black mb-4">
-              Your Big 5 Personality Results
-            </h1>
-            <p className="text-lg text-gray-600">
-              Discover insights about your personality traits and characteristics.
-            </p>
-          </div>
+      {/* Floating icon buttons on the right */}
+      <div className="fixed top-1/3 right-6 z-50 flex flex-col gap-4 items-center">
+        <button
+          onClick={handleDownload}
+          title="Download result"
+          className="w-12 h-12 flex items-center justify-center rounded-full shadow-lg bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:scale-110 transition-all"
+        >
+          <Download className="w-6 h-6" />
+        </button>
+        <button
+          onClick={handleShare}
+          title="Share with your friend"
+          className="w-12 h-12 flex items-center justify-center rounded-full shadow-lg bg-gradient-to-r from-purple-500 to-blue-500 text-white hover:scale-110 transition-all"
+        >
+          <Share2 className="w-6 h-6" />
+        </button>
+        <button
+          onClick={() => setLocation("/")}
+          title="Take the test again"
+          className="w-12 h-12 flex items-center justify-center rounded-full shadow-lg bg-gradient-to-r from-blue-500 to-green-300 text-white hover:scale-110 transition-all"
+        >
+          <RefreshCw className="w-6 h-6" />
+        </button>
+      </div>
+      <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
+        <img 
+          src="/attached_assets/placeholder1.JPG"
+          alt="Test Result Placeholder 1"
+          className="max-w-full h-auto rounded mb-8"
+        />
 
-          <div className="grid gap-6 mb-8">
-            {Object.entries(results).map(([trait, score]) => {
-              if (trait === 'sessionId' || trait === 'descriptions') return null;
-              
-              const traitKey = trait as keyof typeof traitDescriptions;
-              const traitInfo = traitDescriptions[traitKey];
-              const percentage = Math.round(score * 100);
-              
-              return (
-                <Card key={trait} className="w-full">
-                  <CardHeader>
-                    <CardTitle className="flex justify-between items-center">
-                      <span className="text-xl font-semibold">{traitInfo.name}</span>
-                      <span className="text-2xl font-bold text-blue-600">{percentage}%</span>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <Progress value={percentage} className="mb-3" />
-                    <p className="text-gray-600">{traitInfo.description}</p>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
+        <img 
+          src="/attached_assets/placeholder3.JPG"
+          alt="Test Result Placeholder 3"
+          className="max-w-full h-auto rounded mb-12"
+        />
 
-          <div className="text-center">
-            <Button 
-              onClick={() => setLocation("/")}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg mr-4"
-            >
-              Take Test Again
-            </Button>
-            <Button 
-              variant="outline"
-              onClick={() => window.print()}
-              className="px-8 py-3 rounded-lg"
-            >
-              Save Results
-            </Button>
-          </div>
+        {/* Gradient Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-6 w-full max-w-2xl justify-center items-center mt-8 mb-4">
+          <button
+            onClick={handleDownload}
+            className="flex-1 text-lg font-bold py-5 rounded-2xl shadow-lg transition-all bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:scale-105"
+          >
+            Download result
+          </button>
+          <button
+            onClick={handleShare}
+            className="flex-1 text-lg font-bold py-5 rounded-2xl shadow-lg transition-all bg-gradient-to-r from-purple-500 to-blue-500 text-white hover:scale-105"
+          >
+            Share with your friend
+          </button>
+          <button
+            onClick={() => setLocation("/")}
+            className="flex-1 text-lg font-bold py-5 rounded-2xl shadow-lg transition-all bg-gradient-to-r from-blue-500 to-green-300 text-white hover:scale-105"
+          >
+            Take the test again
+          </button>
         </div>
       </div>
-
       <Footer />
     </div>
   );

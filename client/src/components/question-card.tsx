@@ -6,6 +6,7 @@ interface Option {
   color: string;
   trait: string;
   score: number;
+  image?: string;
 }
 
 interface QuestionCardProps {
@@ -14,53 +15,48 @@ interface QuestionCardProps {
   onToggle: () => void;
   index: number;
   totalOptions: number;
+  isMultiSelect?: boolean;
 }
 
-export default function QuestionCard({ option, isSelected, onToggle, index, totalOptions }: QuestionCardProps) {
-  // Calculate gradient colors based on position using theme colors
-  const getButtonGradient = () => {
-    const ratio = totalOptions > 1 ? index / (totalOptions - 1) : 0; // 0 for first, 1 for last
-    
-    // Use different opacity based on selection state
-    const opacity = isSelected ? 1.0 : 0.45;
-    
-    // Use the same color scheme as the footer gradient
-    // Purple -> Blue -> Green progression matching the theme
-    const themeColors = {
-      purple: `hsla(295, 71%, 56%, ${opacity})`,
-      gradientBlue: `hsla(207, 73%, 57%, ${opacity})`, 
-      green: `hsla(84, 60%, 67%, ${opacity})`,
-      purpleLight: `hsla(295, 71%, 70%, ${opacity})`,
-      blueLight: `hsla(207, 73%, 70%, ${opacity})`,
-      greenLight: `hsla(84, 60%, 80%, ${opacity})`
-    };
-    
-    // Create vertical gradients that transition through the theme spectrum
-    if (ratio <= 0.25) {
-      // First quarter: Green variations
-      return `linear-gradient(180deg, ${themeColors.greenLight} 0%, ${themeColors.green} 100%)`;
-    } else if (ratio <= 0.5) {
-      // Second quarter: Green to Blue
-      return `linear-gradient(180deg, ${themeColors.green} 0%, ${themeColors.blueLight} 100%)`;
-    } else if (ratio <= 0.75) {
-      // Third quarter: Blue variations
-      return `linear-gradient(180deg, ${themeColors.blueLight} 0%, ${themeColors.gradientBlue} 100%)`;
-    } else {
-      // Last quarter: Blue to Purple
-      return `linear-gradient(180deg, ${themeColors.gradientBlue} 0%, ${themeColors.purple} 100%)`;
-    }
-  };
-
+export default function QuestionCard({ option, isSelected, onToggle, index, totalOptions, isMultiSelect }: QuestionCardProps) {
   return (
     <div
       className={cn(
-        "card-hover cursor-pointer px-8 py-5 rounded-3xl text-black text-center w-full flex items-center justify-center min-w-full transition-all duration-200 shadow-lg hover:shadow-xl",
-        isSelected && "scale-105"
+        "card-hover cursor-pointer px-8 py-4 rounded-none text-black w-full flex items-center justify-center transition-all duration-200 border border-black bg-white hover:bg-gray-50 max-w-4xl mx-auto",
+        isSelected && "text-white border-none"
       )}
-      style={{ background: getButtonGradient() }}
+      style={{ 
+        backgroundImage: isSelected ? "url('/attached_assets/button-background.png')" : "none",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        transition: "all 0.2s ease"
+      }}
       onClick={onToggle}
     >
-      <span className="font-serif font-medium text-lg leading-relaxed">
+      {/* Render image if present */}
+      {option.image && (
+        <img
+          src={option.image}
+          alt="option visual"
+          className="w-14 h-14 rounded-full object-cover mr-4 select-none border-0 bg-transparent"
+          style={{ boxShadow: 'none' }}
+        />
+      )}
+      {/* Render checkbox for multi-select */}
+      {isMultiSelect && (
+        <input
+          type="checkbox"
+          checked={isSelected}
+          readOnly
+          className="mr-4 w-6 h-6 flex-shrink-0 accent-blue-500 cursor-pointer"
+          tabIndex={-1}
+        />
+      )}
+      <span className={cn(
+        "text-lg leading-relaxed text-center uppercase tracking-wider",
+        !isSelected && "font-normal",
+        isSelected && "font-medium"
+      )}>
         {option.text}
       </span>
     </div>

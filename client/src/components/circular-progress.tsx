@@ -5,7 +5,7 @@ interface CircularProgressProps {
 
 export default function CircularProgress({ progress, children }: CircularProgressProps) {
   const radius = 280;
-  const strokeWidth = 4;
+  const strokeWidth = 18;
   const normalizedRadius = radius - strokeWidth * 2;
   const circumference = normalizedRadius * 2 * Math.PI;
   const strokeDasharray = `${circumference} ${circumference}`;
@@ -55,7 +55,7 @@ export default function CircularProgress({ progress, children }: CircularProgres
       
       {/* Content in the center */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="max-w-md text-center px-12">
+        <div className="max-w-md text-center px-0">
           {children}
         </div>
       </div>
